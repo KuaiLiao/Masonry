@@ -12,7 +12,7 @@
  *  Given a scalar or struct value, wraps it in NSValue
  *  Based on EXPObjectify: https://github.com/specta/expecta
  */
-FOUNDATION_EXPORT id _MASBoxValue(const char *type, ...) {
+id _MASBoxValue(const char *type, ...) {
     va_list v;
     va_start(v, type);
     id obj = nil;
@@ -71,3 +71,17 @@ FOUNDATION_EXPORT id _MASBoxValue(const char *type, ...) {
     va_end(v);
     return obj;
 }
+
+@interface MASUtilities : NSObject {
+    void *_dummy;
+}
+@end
+
+@implementation MASUtilities
+- (instancetype)init {
+    if (self = [super init]) {
+        _dummy = _MASBoxValue;
+    }
+    return self;
+}
+@end
