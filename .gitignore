@@ -16,5 +16,6 @@ profile
 script/env.sh
 DerivedData/
 Pods/
+.build/
 
 /Masonry.xcworkspace/xcshareddata/Masonry.xccheckout
