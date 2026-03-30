@@ -1,10 +1,11 @@
-# Masonry equalToSuperview 功能实现说明
+# Masonry Superview 快捷约束实现说明
 
 ## 概述
-为 Masonry 添加了 `equalToSuperview` 属性，参考了 SnapKit 的 API 设计。这允许开发者使用链式调用方式为视图设置与 superview 相等的约束，支持单个或多个属性的组合。
+为 Masonry 添加了 3 个 superview 快捷属性，参考了 SnapKit 的 API 设计。这允许开发者以链式调用方式将约束与 superview 关联，支持单个或多个属性的组合。
 
 ## 主要特性
 - ✅ 支持链式调用: `make.leading.top.equalToSuperview`
+- ✅ 支持不等关系: `greaterThanOrEqualToSuperview`、`lessThanOrEqualToSuperview`
 - ✅ 支持 UIView 和 UILayoutGuide
 - ✅ 兼容所有现有的 Masonry 方法（offset、inset、priority 等）
 - ✅ 自动获取并处理 superview
@@ -12,13 +13,15 @@
 ## 实现改动
 
 ### 1. MASConstraint.h
-添加了 `equalToSuperview` 属性：
+添加了 superview 快捷属性：
 ```objc
 /**
  *	Sets the constraint relation to NSLayoutRelationEqual with the superview
  *  This is equivalent to equalTo(self.superview)
  */
 @property (nonatomic, readonly) MASConstraint *equalToSuperview;
+@property (nonatomic, readonly) MASConstraint *greaterThanOrEqualToSuperview;
+@property (nonatomic, readonly) MASConstraint *lessThanOrEqualToSuperview;
 ```
 
 ### 2. MASConstraint+Private.h
@@ -32,12 +35,24 @@
 ```
 
 ### 3. MASConstraint.m
-实现了 `equalToSuperview` 属性：
+实现了 3 个 superview 快捷属性：
 ```objc
 - (MASConstraint *)equalToSuperview {
     id superview = [self mas_superview];
     NSAssert(superview != nil, @"equalToSuperview requires the constrained item to have a superview.");
     return self.equalToWithRelation(superview, NSLayoutRelationEqual);
+}
+
+- (MASConstraint *)greaterThanOrEqualToSuperview {
+    id superview = [self mas_superview];
+    NSAssert(superview != nil, @"greaterThanOrEqualToSuperview requires the constrained item to have a superview.");
+    return self.equalToWithRelation(superview, NSLayoutRelationGreaterThanOrEqual);
+}
+
+- (MASConstraint *)lessThanOrEqualToSuperview {
+    id superview = [self mas_superview];
+    NSAssert(superview != nil, @"lessThanOrEqualToSuperview requires the constrained item to have a superview.");
+    return self.equalToWithRelation(superview, NSLayoutRelationLessThanOrEqual);
 }
 ```
 
@@ -56,11 +71,25 @@
 ```
 
 ### 5. MASCompositeConstraint.m
-为组合约束重写 `equalToSuperview`，逐个子约束分发：
+为组合约束重写 superview 快捷属性，逐个子约束分发：
 ```objc
 - (MASConstraint *)equalToSuperview {
     for (MASConstraint *constraint in self.childConstraints.copy) {
         [constraint equalToSuperview];
+    }
+    return self;
+}
+
+- (MASConstraint *)greaterThanOrEqualToSuperview {
+    for (MASConstraint *constraint in self.childConstraints.copy) {
+        [constraint greaterThanOrEqualToSuperview];
+    }
+    return self;
+}
+
+- (MASConstraint *)lessThanOrEqualToSuperview {
+    for (MASConstraint *constraint in self.childConstraints.copy) {
+        [constraint lessThanOrEqualToSuperview];
     }
     return self;
 }
@@ -96,6 +125,12 @@ UIView *childView = [[UIView alloc] init];
 // 使用 multipliedBy 和 priority
 [childView mas_makeConstraints:^(MASConstraintMaker *make) {
     make.width.height.equalToSuperview.multipliedBy(0.5).priorityHigh;
+}];
+
+// 不等关系
+[childView mas_makeConstraints:^(MASConstraintMaker *make) {
+    make.top.greaterThanOrEqualToSuperview.offset(10);
+    make.bottom.lessThanOrEqualToSuperview.offset(-10);
 }];
 ```
 
@@ -149,7 +184,7 @@ view.snp.makeConstraints { make in
 ### 约束链式调用原理
 1. 访问 `make.leading` 返回一个新的 MASViewConstraint
 2. 访问 `.top` 在上一个约束中调用 `addConstraintWithLayoutAttribute:` 添加新属性，形成 MASCompositeConstraint
-3. 访问 `.equalToSuperview` 获取 superview 并为每个子约束调用 `equalToWithRelation:` 
+3. 访问 `.equalToSuperview/.greaterThanOrEqualToSuperview/.lessThanOrEqualToSuperview` 获取 superview 并为每个子约束调用 `equalToWithRelation:`
 
 ### Superview 处理
 - 对于 UIView：直接获取 `view.superview`
@@ -171,4 +206,4 @@ view.snp.makeConstraints { make in
 
 ## 测试案例
 - 示例代码见 `MasonryEqualToSuperviewExample.m`
-- 单元测试覆盖了普通 view、无 superview 断言，以及 composite constraint 为每个 child 独立解析 superview
+- 单元测试覆盖了 equal/greater/less 三种 superview 快捷属性，包括普通 view、无 superview 断言，以及 composite constraint 为每个 child 独立解析 superview

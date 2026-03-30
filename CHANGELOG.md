@@ -2,8 +2,9 @@ Unreleased
 ==========
 
 * Added `equalToSuperview` as a shorthand for constraining to a view's superview or a layout guide's owning view
-* Added an assertion for invalid `equalToSuperview` usage when the constrained item has no superview yet
-* Updated composite constraint handling so each child resolves its own superview when using `equalToSuperview`
+* Added `greaterThanOrEqualToSuperview` and `lessThanOrEqualToSuperview` as superview relation shortcuts
+* Added assertions for invalid superview shortcut usage when the constrained item has no superview yet
+* Updated composite constraint handling so each child resolves its own superview when using superview shortcuts
 
 v1.0.2
 ======

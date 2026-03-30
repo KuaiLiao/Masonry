@@ -20,6 +20,7 @@
 @interface MASViewConstraint ()
 
 @property (nonatomic, weak) MASLayoutConstraint *layoutConstraint;
+@property (nonatomic, assign) NSLayoutRelation layoutRelation;
 @property (nonatomic, assign) CGFloat layoutConstant;
 @property (nonatomic, assign) MASLayoutPriority layoutPriority;
 @property (nonatomic, assign) CGFloat layoutMultiplier;
@@ -132,6 +133,58 @@ SpecBegin(MASCompositeConstraint) {
     MASViewConstraint *secondChild = composite.childConstraints[1];
     expect(firstChild.secondViewAttribute.view).to.beIdenticalTo(firstSuperview);
     expect(secondChild.secondViewAttribute.view).to.beIdenticalTo(secondSuperview);
+    expect(firstChild.layoutRelation).to.equal(NSLayoutRelationEqual);
+    expect(secondChild.layoutRelation).to.equal(NSLayoutRelationEqual);
+}
+
+- (void)testGreaterThanOrEqualToSuperviewUsesEachChildSuperview {
+    MAS_VIEW *firstSuperview = MAS_VIEW.new;
+    MAS_VIEW *secondSuperview = MAS_VIEW.new;
+    MAS_VIEW *firstView = MAS_VIEW.new;
+    MAS_VIEW *secondView = MAS_VIEW.new;
+    [firstSuperview addSubview:firstView];
+    [secondSuperview addSubview:secondView];
+
+    NSArray *children = @[
+        [[MASViewConstraint alloc] initWithFirstViewAttribute:firstView.mas_left],
+        [[MASViewConstraint alloc] initWithFirstViewAttribute:secondView.mas_right]
+    ];
+    composite = [[MASCompositeConstraint alloc] initWithChildren:children];
+    composite.delegate = delegate;
+
+    [composite greaterThanOrEqualToSuperview];
+
+    MASViewConstraint *firstChild = composite.childConstraints[0];
+    MASViewConstraint *secondChild = composite.childConstraints[1];
+    expect(firstChild.secondViewAttribute.view).to.beIdenticalTo(firstSuperview);
+    expect(secondChild.secondViewAttribute.view).to.beIdenticalTo(secondSuperview);
+    expect(firstChild.layoutRelation).to.equal(NSLayoutRelationGreaterThanOrEqual);
+    expect(secondChild.layoutRelation).to.equal(NSLayoutRelationGreaterThanOrEqual);
+}
+
+- (void)testLessThanOrEqualToSuperviewUsesEachChildSuperview {
+    MAS_VIEW *firstSuperview = MAS_VIEW.new;
+    MAS_VIEW *secondSuperview = MAS_VIEW.new;
+    MAS_VIEW *firstView = MAS_VIEW.new;
+    MAS_VIEW *secondView = MAS_VIEW.new;
+    [firstSuperview addSubview:firstView];
+    [secondSuperview addSubview:secondView];
+
+    NSArray *children = @[
+        [[MASViewConstraint alloc] initWithFirstViewAttribute:firstView.mas_left],
+        [[MASViewConstraint alloc] initWithFirstViewAttribute:secondView.mas_right]
+    ];
+    composite = [[MASCompositeConstraint alloc] initWithChildren:children];
+    composite.delegate = delegate;
+
+    [composite lessThanOrEqualToSuperview];
+
+    MASViewConstraint *firstChild = composite.childConstraints[0];
+    MASViewConstraint *secondChild = composite.childConstraints[1];
+    expect(firstChild.secondViewAttribute.view).to.beIdenticalTo(firstSuperview);
+    expect(secondChild.secondViewAttribute.view).to.beIdenticalTo(secondSuperview);
+    expect(firstChild.layoutRelation).to.equal(NSLayoutRelationLessThanOrEqual);
+    expect(secondChild.layoutRelation).to.equal(NSLayoutRelationLessThanOrEqual);
 }
 
 - (void)testModifyInsetsOnAppropriateChildren {

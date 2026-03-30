@@ -6,11 +6,19 @@
 // 单个属性
 make.leading.equalToSuperview;
 make.top.equalToSuperview;
+make.top.greaterThanOrEqualToSuperview;
+make.bottom.lessThanOrEqualToSuperview;
 
 // 多个属性（链式调用）
 make.leading.top.equalToSuperview;
 make.trailing.bottom.equalToSuperview;
 make.edges.equalToSuperview;
+```
+
+```objc
+// 不等关系
+make.top.greaterThanOrEqualToSuperview.offset(8);
+make.bottom.lessThanOrEqualToSuperview.offset(-8);
 ```
 
 ## 常见模式
@@ -100,6 +108,13 @@ make.leading.top.equalToSuperview.priorityHigh;
 make.edges.equalToSuperview.insets(UIEdgeInsetsMake(10, 10, 10, 10)).priorityMedium;
 ```
 
+同样适用于：
+
+```objc
+make.top.greaterThanOrEqualToSuperview.priorityHigh;
+make.bottom.lessThanOrEqualToSuperview.priorityMedium;
+```
+
 ## 适用的属性
 
 以下所有属性都支持 `equalToSuperview`：
@@ -160,7 +175,7 @@ UILayoutGuide *guide = [[UILayoutGuide alloc] init];
 
 ## Nil 检查
 
-`equalToSuperview` 在 superview 为空时会立即触发断言，因此如果视图层级还未建立，需要显式判断：
+`equalToSuperview`、`greaterThanOrEqualToSuperview`、`lessThanOrEqualToSuperview` 在 superview 为空时都会立即触发断言，因此如果视图层级还未建立，需要显式判断：
 
 ```objc
 [childView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -192,7 +207,7 @@ UIView *childView = [[UIView alloc] init];
 
 ## 性能提示
 
-- `equalToSuperview` 是一个属性而不是方法，无需 `()` 调用
+- `equalToSuperview`、`greaterThanOrEqualToSuperview`、`lessThanOrEqualToSuperview` 都是属性而不是方法，无需 `()` 调用
 - 约束计算只在设置时进行，不影响布局性能
 - 组合约束会为每个 child 独立解析 superview，避免复合链路误用第一个 child 的 superview
 

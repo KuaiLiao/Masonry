@@ -143,6 +143,52 @@ SpecBegin(MASViewConstraint) {
     }).to.raise(@"NSInternalInconsistencyException");
 }
 
+- (void)testGreaterThanOrEqualToSuperviewUsesSuperviewAsSecondAttribute {
+    MAS_VIEW *view = MAS_VIEW.new;
+    [superview addSubview:view];
+    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
+    newConstraint.delegate = delegate;
+
+    [newConstraint greaterThanOrEqualToSuperview];
+
+    expect(newConstraint.secondViewAttribute.view).to.beIdenticalTo(superview);
+    expect(newConstraint.secondViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeLeft);
+    expect(newConstraint.layoutRelation).to.equal(NSLayoutRelationGreaterThanOrEqual);
+}
+
+- (void)testGreaterThanOrEqualToSuperviewWithoutSuperviewRaises {
+    MAS_VIEW *view = MAS_VIEW.new;
+    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
+    newConstraint.delegate = delegate;
+
+    expect(^{
+        [newConstraint greaterThanOrEqualToSuperview];
+    }).to.raise(@"NSInternalInconsistencyException");
+}
+
+- (void)testLessThanOrEqualToSuperviewUsesSuperviewAsSecondAttribute {
+    MAS_VIEW *view = MAS_VIEW.new;
+    [superview addSubview:view];
+    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
+    newConstraint.delegate = delegate;
+
+    [newConstraint lessThanOrEqualToSuperview];
+
+    expect(newConstraint.secondViewAttribute.view).to.beIdenticalTo(superview);
+    expect(newConstraint.secondViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeLeft);
+    expect(newConstraint.layoutRelation).to.equal(NSLayoutRelationLessThanOrEqual);
+}
+
+- (void)testLessThanOrEqualToSuperviewWithoutSuperviewRaises {
+    MAS_VIEW *view = MAS_VIEW.new;
+    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
+    newConstraint.delegate = delegate;
+
+    expect(^{
+        [newConstraint lessThanOrEqualToSuperview];
+    }).to.raise(@"NSInternalInconsistencyException");
+}
+
 - (void)testRelationAcceptsValueWithCGPoint {
     CGPoint point = CGPointMake(10, 20);
     NSValue *value = [NSValue value:&point withObjCType:@encode(CGPoint)];

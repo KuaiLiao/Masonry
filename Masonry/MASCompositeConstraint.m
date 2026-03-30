@@ -94,6 +94,20 @@
     return self;
 }
 
+- (MASConstraint *)greaterThanOrEqualToSuperview {
+    for (MASConstraint *constraint in self.childConstraints.copy) {
+        [constraint greaterThanOrEqualToSuperview];
+    }
+    return self;
+}
+
+- (MASConstraint *)lessThanOrEqualToSuperview {
+    for (MASConstraint *constraint in self.childConstraints.copy) {
+        [constraint lessThanOrEqualToSuperview];
+    }
+    return self;
+}
+
 #pragma mark - attribute chaining
 
 - (MASConstraint *)addConstraintWithLayoutAttribute:(NSLayoutAttribute)layoutAttribute {
