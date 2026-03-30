@@ -1,4 +1,4 @@
-Unreleased
+v1.2.4
 ==========
 
 * Added `equalToSuperview` as a shorthand for constraining to a view's superview or a layout guide's owning view

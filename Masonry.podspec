@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'Masonry'
-  s.version  = '1.2.3'
+  s.version  = '1.2.4'
   s.license  = 'MIT'
   s.summary  = 'Harness the power of Auto Layout NSLayoutConstraints with a simplified, chainable and expressive syntax.'
   s.homepage = 'https://github.com/SnapKit/Masonry'
@@ -32,4 +32,5 @@ Pod::Spec.new do |s|
   s.platforms = { :ios => "9.0", :osx => "10.11", :tvos => "9.0" }
   s.requires_arc = true
   s.static_framework = true
+  s.prefix_header_file = false
 end
