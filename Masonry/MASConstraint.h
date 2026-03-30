@@ -117,7 +117,7 @@ NS_ASSUME_NONNULL_BEGIN
  *	Sets the constraint relation to NSLayoutRelationEqual with the superview
  *  This is equivalent to equalTo(self.superview)
  */
-@property (nonatomic, copy, readonly) MASConstraint *equalToSuperview;
+@property (nonatomic, readonly) MASConstraint *equalToSuperview;
 
 /**
  *	Optional semantic property which has no effect but improves the readability of constraint

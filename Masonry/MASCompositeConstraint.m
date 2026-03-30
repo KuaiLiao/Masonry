@@ -87,6 +87,13 @@
     };
 }
 
+- (MASConstraint *)equalToSuperview {
+    for (MASConstraint *constraint in self.childConstraints.copy) {
+        [constraint equalToSuperview];
+    }
+    return self;
+}
+
 #pragma mark - attribute chaining
 
 - (MASConstraint *)addConstraintWithLayoutAttribute:(NSLayoutAttribute)layoutAttribute {
@@ -150,16 +157,6 @@
     for (MASConstraint *constraint in self.childConstraints) {
         constraint.centerOffset = centerOffset;
     }
-}
-
-#pragma mark - Superview Support
-
-- (id)mas_superview {
-    // Get superview from the first child constraint
-    if (self.childConstraints.count > 0) {
-        return [self.childConstraints[0] mas_superview];
-    }
-    return nil;
 }
 
 #pragma mark - MASConstraint

@@ -111,6 +111,29 @@ SpecBegin(MASCompositeConstraint) {
     expect(composite.childConstraints[1]).to.beKindOf(MASCompositeConstraint.class);
 }
 
+- (void)testEqualToSuperviewUsesEachChildSuperview {
+    MAS_VIEW *firstSuperview = MAS_VIEW.new;
+    MAS_VIEW *secondSuperview = MAS_VIEW.new;
+    MAS_VIEW *firstView = MAS_VIEW.new;
+    MAS_VIEW *secondView = MAS_VIEW.new;
+    [firstSuperview addSubview:firstView];
+    [secondSuperview addSubview:secondView];
+
+    NSArray *children = @[
+        [[MASViewConstraint alloc] initWithFirstViewAttribute:firstView.mas_left],
+        [[MASViewConstraint alloc] initWithFirstViewAttribute:secondView.mas_right]
+    ];
+    composite = [[MASCompositeConstraint alloc] initWithChildren:children];
+    composite.delegate = delegate;
+
+    [composite equalToSuperview];
+
+    MASViewConstraint *firstChild = composite.childConstraints[0];
+    MASViewConstraint *secondChild = composite.childConstraints[1];
+    expect(firstChild.secondViewAttribute.view).to.beIdenticalTo(firstSuperview);
+    expect(secondChild.secondViewAttribute.view).to.beIdenticalTo(secondSuperview);
+}
+
 - (void)testModifyInsetsOnAppropriateChildren {
     NSArray *children = @[
         [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_right],

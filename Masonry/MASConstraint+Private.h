@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
  *	Returns the superview of the constraint's view/layoutGuide
  *  Should return the superview for the first item in the constraint
  */
-- (id)mas_superview;
+- (MAS_VIEW *_Nullable)mas_superview;
 
 @end
 

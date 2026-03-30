@@ -121,6 +121,28 @@ SpecBegin(MASViewConstraint) {
     expect(constraint.layoutConstant).to.equal(42);
 }
 
+- (void)testEqualToSuperviewUsesSuperviewAsSecondAttribute {
+    MAS_VIEW *view = MAS_VIEW.new;
+    [superview addSubview:view];
+    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
+    newConstraint.delegate = delegate;
+
+    [newConstraint equalToSuperview];
+
+    expect(newConstraint.secondViewAttribute.view).to.beIdenticalTo(superview);
+    expect(newConstraint.secondViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeLeft);
+}
+
+- (void)testEqualToSuperviewWithoutSuperviewRaises {
+    MAS_VIEW *view = MAS_VIEW.new;
+    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
+    newConstraint.delegate = delegate;
+
+    expect(^{
+        [newConstraint equalToSuperview];
+    }).to.raise(@"NSInternalInconsistencyException");
+}
+
 - (void)testRelationAcceptsValueWithCGPoint {
     CGPoint point = CGPointMake(10, 20);
     NSValue *value = [NSValue value:&point withObjCType:@encode(CGPoint)];

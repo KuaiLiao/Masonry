@@ -61,7 +61,9 @@
 }
 
 - (MASConstraint *)equalToSuperview {
-    return self.equalToWithRelation([self mas_superview], NSLayoutRelationEqual);
+    id superview = [self mas_superview];
+    NSAssert(superview != nil, @"equalToSuperview requires the constrained item to have a superview.");
+    return self.equalToWithRelation(superview, NSLayoutRelationEqual);
 }
 
 #pragma mark - MASLayoutPriority proxies
@@ -271,6 +273,8 @@
 - (MASConstraint * (^)(MASLayoutPriority priority))priority { MASMethodNotImplemented(); }
 
 - (MASConstraint * (^)(id, NSLayoutRelation))equalToWithRelation { MASMethodNotImplemented(); }
+
+- (MAS_VIEW *)mas_superview { MASMethodNotImplemented(); }
 
 - (MASConstraint * (^)(id key))key { MASMethodNotImplemented(); }
 

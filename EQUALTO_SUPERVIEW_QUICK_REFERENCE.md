@@ -160,7 +160,7 @@ UILayoutGuide *guide = [[UILayoutGuide alloc] init];
 
 ## Nil 检查
 
-虽然通常不需要显式检查，但如果需要：
+`equalToSuperview` 在 superview 为空时会立即触发断言，因此如果视图层级还未建立，需要显式判断：
 
 ```objc
 [childView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -176,7 +176,7 @@ UILayoutGuide *guide = [[UILayoutGuide alloc] init];
 ```objc
 UIView *childView = [[UIView alloc] init];
 [childView mas_makeConstraints:^(MASConstraintMaker *make) {
-    make.edges.equalToSuperview;  // superview 还是 nil
+    make.edges.equalToSuperview;  // 会触发断言
 }];
 [parentView addSubview:childView];
 ```
@@ -194,7 +194,7 @@ UIView *childView = [[UIView alloc] init];
 
 - `equalToSuperview` 是一个属性而不是方法，无需 `()` 调用
 - 约束计算只在设置时进行，不影响布局性能
-- 链式调用不会增加任何开销
+- 组合约束会为每个 child 独立解析 superview，避免复合链路误用第一个 child 的 superview
 
 ## 完整示例
 
