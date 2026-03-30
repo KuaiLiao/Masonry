@@ -29,6 +29,13 @@
 
 @end
 
+typedef MASConstraint * _Nonnull (*MASConstraintNoArgGetterIMP)(id, SEL);
+
+static void MASInvokeNoArgGetter(id target, SEL selector) {
+    MASConstraintNoArgGetterIMP getter = (MASConstraintNoArgGetterIMP)[target methodForSelector:selector];
+    getter(target, selector);
+}
+
 SpecBegin(MASViewConstraint) {
     MASConstraintDelegateMock *delegate;
     MAS_VIEW *superview;
@@ -48,6 +55,29 @@ SpecBegin(MASViewConstraint) {
 
     otherView = MAS_VIEW.new;
     [superview addSubview:otherView];
+}
+
+- (void)assertSuperviewShortcutSelector:(SEL)selector relation:(NSLayoutRelation)relation {
+    MAS_VIEW *view = MAS_VIEW.new;
+    [superview addSubview:view];
+    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
+    newConstraint.delegate = delegate;
+
+    MASInvokeNoArgGetter(newConstraint, selector);
+
+    expect(newConstraint.secondViewAttribute.view).to.beIdenticalTo(superview);
+    expect(newConstraint.secondViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeLeft);
+    expect(newConstraint.layoutRelation).to.equal(relation);
+}
+
+- (void)assertSuperviewShortcutSelectorRaisesWithoutSuperview:(SEL)selector {
+    MAS_VIEW *view = MAS_VIEW.new;
+    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
+    newConstraint.delegate = delegate;
+
+    expect(^{
+        MASInvokeNoArgGetter(newConstraint, selector);
+    }).to.raise(@"NSInternalInconsistencyException");
 }
 
 
@@ -122,71 +152,27 @@ SpecBegin(MASViewConstraint) {
 }
 
 - (void)testEqualToSuperviewUsesSuperviewAsSecondAttribute {
-    MAS_VIEW *view = MAS_VIEW.new;
-    [superview addSubview:view];
-    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
-    newConstraint.delegate = delegate;
-
-    [newConstraint equalToSuperview];
-
-    expect(newConstraint.secondViewAttribute.view).to.beIdenticalTo(superview);
-    expect(newConstraint.secondViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeLeft);
+    [self assertSuperviewShortcutSelector:@selector(equalToSuperview) relation:NSLayoutRelationEqual];
 }
 
 - (void)testEqualToSuperviewWithoutSuperviewRaises {
-    MAS_VIEW *view = MAS_VIEW.new;
-    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
-    newConstraint.delegate = delegate;
-
-    expect(^{
-        [newConstraint equalToSuperview];
-    }).to.raise(@"NSInternalInconsistencyException");
+    [self assertSuperviewShortcutSelectorRaisesWithoutSuperview:@selector(equalToSuperview)];
 }
 
 - (void)testGreaterThanOrEqualToSuperviewUsesSuperviewAsSecondAttribute {
-    MAS_VIEW *view = MAS_VIEW.new;
-    [superview addSubview:view];
-    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
-    newConstraint.delegate = delegate;
-
-    [newConstraint greaterThanOrEqualToSuperview];
-
-    expect(newConstraint.secondViewAttribute.view).to.beIdenticalTo(superview);
-    expect(newConstraint.secondViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeLeft);
-    expect(newConstraint.layoutRelation).to.equal(NSLayoutRelationGreaterThanOrEqual);
+    [self assertSuperviewShortcutSelector:@selector(greaterThanOrEqualToSuperview) relation:NSLayoutRelationGreaterThanOrEqual];
 }
 
 - (void)testGreaterThanOrEqualToSuperviewWithoutSuperviewRaises {
-    MAS_VIEW *view = MAS_VIEW.new;
-    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
-    newConstraint.delegate = delegate;
-
-    expect(^{
-        [newConstraint greaterThanOrEqualToSuperview];
-    }).to.raise(@"NSInternalInconsistencyException");
+    [self assertSuperviewShortcutSelectorRaisesWithoutSuperview:@selector(greaterThanOrEqualToSuperview)];
 }
 
 - (void)testLessThanOrEqualToSuperviewUsesSuperviewAsSecondAttribute {
-    MAS_VIEW *view = MAS_VIEW.new;
-    [superview addSubview:view];
-    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
-    newConstraint.delegate = delegate;
-
-    [newConstraint lessThanOrEqualToSuperview];
-
-    expect(newConstraint.secondViewAttribute.view).to.beIdenticalTo(superview);
-    expect(newConstraint.secondViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeLeft);
-    expect(newConstraint.layoutRelation).to.equal(NSLayoutRelationLessThanOrEqual);
+    [self assertSuperviewShortcutSelector:@selector(lessThanOrEqualToSuperview) relation:NSLayoutRelationLessThanOrEqual];
 }
 
 - (void)testLessThanOrEqualToSuperviewWithoutSuperviewRaises {
-    MAS_VIEW *view = MAS_VIEW.new;
-    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
-    newConstraint.delegate = delegate;
-
-    expect(^{
-        [newConstraint lessThanOrEqualToSuperview];
-    }).to.raise(@"NSInternalInconsistencyException");
+    [self assertSuperviewShortcutSelectorRaisesWithoutSuperview:@selector(lessThanOrEqualToSuperview)];
 }
 
 - (void)testRelationAcceptsValueWithCGPoint {
