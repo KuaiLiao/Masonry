@@ -60,6 +60,24 @@
     };
 }
 
+- (MASConstraint *)equalToSuperview {
+    id superview = [self mas_superview];
+    NSAssert(superview != nil, @"equalToSuperview requires the constrained item to have a superview.");
+    return self.equalToWithRelation(superview, NSLayoutRelationEqual);
+}
+
+- (MASConstraint *)greaterThanOrEqualToSuperview {
+    id superview = [self mas_superview];
+    NSAssert(superview != nil, @"greaterThanOrEqualToSuperview requires the constrained item to have a superview.");
+    return self.equalToWithRelation(superview, NSLayoutRelationGreaterThanOrEqual);
+}
+
+- (MASConstraint *)lessThanOrEqualToSuperview {
+    id superview = [self mas_superview];
+    NSAssert(superview != nil, @"lessThanOrEqualToSuperview requires the constrained item to have a superview.");
+    return self.equalToWithRelation(superview, NSLayoutRelationLessThanOrEqual);
+}
+
 #pragma mark - MASLayoutPriority proxies
 
 - (MASConstraint * (^)(void))priorityLow {
@@ -267,6 +285,8 @@
 - (MASConstraint * (^)(MASLayoutPriority priority))priority { MASMethodNotImplemented(); }
 
 - (MASConstraint * (^)(id, NSLayoutRelation))equalToWithRelation { MASMethodNotImplemented(); }
+
+- (MAS_VIEW *)mas_superview { MASMethodNotImplemented(); }
 
 - (MASConstraint * (^)(id key))key { MASMethodNotImplemented(); }
 

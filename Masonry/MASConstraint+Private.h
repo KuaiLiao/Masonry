@@ -44,6 +44,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (MASConstraint *)addConstraintWithLayoutAttribute:(NSLayoutAttribute)layoutAttribute;
 
+/**
+ *	Returns the superview of the constraint's view/layoutGuide
+ *  Should return the superview for the first item in the constraint
+ */
+- (MAS_VIEW *_Nullable)mas_superview;
+
 @end
 
 NS_ASSUME_NONNULL_END

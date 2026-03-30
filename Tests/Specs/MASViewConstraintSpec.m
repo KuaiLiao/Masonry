@@ -29,6 +29,13 @@
 
 @end
 
+typedef MASConstraint * _Nonnull (*MASConstraintNoArgGetterIMP)(id, SEL);
+
+static void MASInvokeNoArgGetter(id target, SEL selector) {
+    MASConstraintNoArgGetterIMP getter = (MASConstraintNoArgGetterIMP)[target methodForSelector:selector];
+    getter(target, selector);
+}
+
 SpecBegin(MASViewConstraint) {
     MASConstraintDelegateMock *delegate;
     MAS_VIEW *superview;
@@ -48,6 +55,29 @@ SpecBegin(MASViewConstraint) {
 
     otherView = MAS_VIEW.new;
     [superview addSubview:otherView];
+}
+
+- (void)assertSuperviewShortcutSelector:(SEL)selector relation:(NSLayoutRelation)relation {
+    MAS_VIEW *view = MAS_VIEW.new;
+    [superview addSubview:view];
+    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
+    newConstraint.delegate = delegate;
+
+    MASInvokeNoArgGetter(newConstraint, selector);
+
+    expect(newConstraint.secondViewAttribute.view).to.beIdenticalTo(superview);
+    expect(newConstraint.secondViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeLeft);
+    expect(newConstraint.layoutRelation).to.equal(relation);
+}
+
+- (void)assertSuperviewShortcutSelectorRaisesWithoutSuperview:(SEL)selector {
+    MAS_VIEW *view = MAS_VIEW.new;
+    MASViewConstraint *newConstraint = [[MASViewConstraint alloc] initWithFirstViewAttribute:view.mas_left];
+    newConstraint.delegate = delegate;
+
+    expect(^{
+        MASInvokeNoArgGetter(newConstraint, selector);
+    }).to.raise(@"NSInternalInconsistencyException");
 }
 
 
@@ -119,6 +149,30 @@ SpecBegin(MASViewConstraint) {
     
     expect(constraint.secondViewAttribute.view).to.beNil();
     expect(constraint.layoutConstant).to.equal(42);
+}
+
+- (void)testEqualToSuperviewUsesSuperviewAsSecondAttribute {
+    [self assertSuperviewShortcutSelector:@selector(equalToSuperview) relation:NSLayoutRelationEqual];
+}
+
+- (void)testEqualToSuperviewWithoutSuperviewRaises {
+    [self assertSuperviewShortcutSelectorRaisesWithoutSuperview:@selector(equalToSuperview)];
+}
+
+- (void)testGreaterThanOrEqualToSuperviewUsesSuperviewAsSecondAttribute {
+    [self assertSuperviewShortcutSelector:@selector(greaterThanOrEqualToSuperview) relation:NSLayoutRelationGreaterThanOrEqual];
+}
+
+- (void)testGreaterThanOrEqualToSuperviewWithoutSuperviewRaises {
+    [self assertSuperviewShortcutSelectorRaisesWithoutSuperview:@selector(greaterThanOrEqualToSuperview)];
+}
+
+- (void)testLessThanOrEqualToSuperviewUsesSuperviewAsSecondAttribute {
+    [self assertSuperviewShortcutSelector:@selector(lessThanOrEqualToSuperview) relation:NSLayoutRelationLessThanOrEqual];
+}
+
+- (void)testLessThanOrEqualToSuperviewWithoutSuperviewRaises {
+    [self assertSuperviewShortcutSelectorRaisesWithoutSuperview:@selector(lessThanOrEqualToSuperview)];
 }
 
 - (void)testRelationAcceptsValueWithCGPoint {
