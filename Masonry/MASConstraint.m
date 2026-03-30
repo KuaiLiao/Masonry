@@ -60,6 +60,10 @@
     };
 }
 
+- (MASConstraint *)equalToSuperview {
+    return self.equalToWithRelation([self mas_superview], NSLayoutRelationEqual);
+}
+
 #pragma mark - MASLayoutPriority proxies
 
 - (MASConstraint * (^)(void))priorityLow {

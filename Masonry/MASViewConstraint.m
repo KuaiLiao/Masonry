@@ -329,6 +329,21 @@
     }
 }
 
+#pragma mark - Superview Support
+
+- (id)mas_superview {
+    id item = self.firstViewAttribute.item;
+    if ([item isKindOfClass:MASLayoutGuide.class]) {
+        // For layout guides, return the owning view
+        return ((MASLayoutGuide *)item).owningView;
+    } else if ([item isKindOfClass:MAS_VIEW.class]) {
+        MAS_VIEW *view = (MAS_VIEW *)item;
+        return view.superview;
+    }
+    // Fallback: try to get from firstViewAttribute.view
+    return self.firstViewAttribute.view.superview;
+}
+
 #pragma mark - MASConstraint
 
 - (void)activate {

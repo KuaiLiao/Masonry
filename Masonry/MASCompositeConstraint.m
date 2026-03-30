@@ -152,6 +152,16 @@
     }
 }
 
+#pragma mark - Superview Support
+
+- (id)mas_superview {
+    // Get superview from the first child constraint
+    if (self.childConstraints.count > 0) {
+        return [self.childConstraints[0] mas_superview];
+    }
+    return nil;
+}
+
 #pragma mark - MASConstraint
 
 - (void)activate {
