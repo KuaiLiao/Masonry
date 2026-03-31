@@ -64,6 +64,36 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) MASConstraint *edges;
 
 /**
+ *    Creates a MASCompositeConstraint with horizontal edge attributes (left, right)
+ *  with the first item set to the makers associated view
+ */
+@property (nonatomic, readonly) MASConstraint *horizontalEdges;
+
+/**
+ *    Creates a MASCompositeConstraint with vertical edge attributes (top, bottom)
+ *  with the first item set to the makers associated view
+ */
+@property (nonatomic, readonly) MASConstraint *verticalEdges;
+
+/**
+ *    Creates a MASCompositeConstraint with directional edge attributes (top, bottom, leading, trailing)
+ *  with the first item set to the makers associated view
+ */
+@property (nonatomic, readonly) MASConstraint *directionalEdges;
+
+/**
+ *    Creates a MASCompositeConstraint with directional horizontal edge attributes (leading, trailing)
+ *  with the first item set to the makers associated view
+ */
+@property (nonatomic, readonly) MASConstraint *directionalHorizontalEdges;
+
+/**
+ *    Creates a MASCompositeConstraint with directional vertical edge attributes (top, bottom)
+ *  with the first item set to the makers associated view
+ */
+@property (nonatomic, readonly) MASConstraint *directionalVerticalEdges;
+
+/**
  *    Creates a MASCompositeConstraint with type MASCompositeConstraintTypeSize
  *  which generates the appropriate MASViewConstraint children (width, height)
  *  with the first item set to the makers associated view
@@ -131,6 +161,36 @@ NS_ASSUME_NONNULL_BEGIN
  *  with the first item set to the makers associated view
  */
 @property (nonatomic, readonly) MASConstraint *edges;
+
+/**
+ *	Creates a MASCompositeConstraint with horizontal edge attributes (left, right)
+ *  with the first item set to the makers associated view
+ */
+@property (nonatomic, readonly) MASConstraint *horizontalEdges;
+
+/**
+ *	Creates a MASCompositeConstraint with vertical edge attributes (top, bottom)
+ *  with the first item set to the makers associated view
+ */
+@property (nonatomic, readonly) MASConstraint *verticalEdges;
+
+/**
+ *	Creates a MASCompositeConstraint with directional edge attributes (top, bottom, leading, trailing)
+ *  with the first item set to the makers associated view
+ */
+@property (nonatomic, readonly) MASConstraint *directionalEdges;
+
+/**
+ *	Creates a MASCompositeConstraint with directional horizontal edge attributes (leading, trailing)
+ *  with the first item set to the makers associated view
+ */
+@property (nonatomic, readonly) MASConstraint *directionalHorizontalEdges;
+
+/**
+ *	Creates a MASCompositeConstraint with directional vertical edge attributes (top, bottom)
+ *  with the first item set to the makers associated view
+ */
+@property (nonatomic, readonly) MASConstraint *directionalVerticalEdges;
 
 /**
  *	Creates a MASCompositeConstraint with type MASCompositeConstraintTypeSize

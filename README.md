@@ -197,6 +197,51 @@ make.edges.equalTo(view2);
 make.edges.equalTo(superview).insets(UIEdgeInsetsMake(5, 10, 15, 20))
 ```
 
+#### horizontalEdges
+
+```obj-c
+// make left and right equal view2
+make.horizontalEdges.equalTo(view2);
+
+// make left = superview.left + 10, right = superview.right - 20
+make.horizontalEdges.equalTo(superview).insets(UIEdgeInsetsMake(0, 10, 0, 20));
+```
+
+#### verticalEdges
+
+```obj-c
+// make top and bottom equal view2
+make.verticalEdges.equalTo(view2);
+
+// make top = superview.top + 5, bottom = superview.bottom - 15
+make.verticalEdges.equalTo(superview).insets(UIEdgeInsetsMake(5, 0, 15, 0));
+```
+
+#### directionalEdges
+
+```obj-c
+// make top, leading, bottom, trailing equal view2
+make.directionalEdges.equalTo(view2);
+
+// make top = superview.top + 5, leading = superview.leading + 10,
+//      bottom = superview.bottom - 15, trailing = superview.trailing - 20
+make.directionalEdges.equalTo(superview).insets(UIEdgeInsetsMake(5, 10, 15, 20));
+```
+
+#### directionalHorizontalEdges
+
+```obj-c
+// make leading and trailing equal view2
+make.directionalHorizontalEdges.equalTo(view2);
+```
+
+#### directionalVerticalEdges
+
+```obj-c
+// make top and bottom equal view2
+make.directionalVerticalEdges.equalTo(view2);
+```
+
 #### size
 
 ```obj-c
@@ -411,4 +456,3 @@ Copy the included code snippets to ``~/Library/Developer/Xcode/UserData/CodeSnip
 * Eye candy
 * Mac example project
 * More tests and examples
-
