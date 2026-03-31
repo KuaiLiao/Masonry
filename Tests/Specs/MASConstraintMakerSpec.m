@@ -108,6 +108,79 @@ SpecBegin(MASConstraintMaker) {
     expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeBottom);
 }
 
+- (void)testCreateHorizontalEdges {
+    composite = (MASCompositeConstraint *)maker.horizontalEdges;
+    expect(composite.childConstraints).to.haveCountOf(2);
+
+    MASViewConstraint *viewConstraint = composite.childConstraints[0];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeLeft);
+
+    viewConstraint = composite.childConstraints[1];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeRight);
+}
+
+- (void)testCreateVerticalEdges {
+    composite = (MASCompositeConstraint *)maker.verticalEdges;
+    expect(composite.childConstraints).to.haveCountOf(2);
+
+    MASViewConstraint *viewConstraint = composite.childConstraints[0];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeTop);
+
+    viewConstraint = composite.childConstraints[1];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeBottom);
+}
+
+- (void)testCreateDirectionalEdges {
+    composite = (MASCompositeConstraint *)maker.directionalEdges;
+    expect(composite.childConstraints).to.haveCountOf(4);
+
+    MASViewConstraint *viewConstraint = composite.childConstraints[0];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeTop);
+
+    viewConstraint = composite.childConstraints[1];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeBottom);
+
+    viewConstraint = composite.childConstraints[2];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeLeading);
+
+    viewConstraint = composite.childConstraints[3];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeTrailing);
+}
+
+- (void)testCreateDirectionalHorizontalEdges {
+    composite = (MASCompositeConstraint *)maker.directionalHorizontalEdges;
+    expect(composite.childConstraints).to.haveCountOf(2);
+
+    MASViewConstraint *viewConstraint = composite.childConstraints[0];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeLeading);
+
+    viewConstraint = composite.childConstraints[1];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeTrailing);
+}
+
+- (void)testCreateDirectionalVerticalEdges {
+    composite = (MASCompositeConstraint *)maker.directionalVerticalEdges;
+    expect(composite.childConstraints).to.haveCountOf(2);
+
+    MASViewConstraint *viewConstraint = composite.childConstraints[0];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeTop);
+
+    viewConstraint = composite.childConstraints[1];
+    expect(viewConstraint.firstViewAttribute.view).to.beIdenticalTo(maker.view);
+    expect(viewConstraint.firstViewAttribute.layoutAttribute).to.equal(NSLayoutAttributeBottom);
+}
+
 - (void)testCreateWidthAndHeightChildren {
     composite = (MASCompositeConstraint *)maker.size;
     expect(composite.childConstraints).to.haveCountOf(2);
