@@ -1,3 +1,7 @@
+v1.2.5
+==========
+Unified grammar for `superview` constraints, eg: `equalToSuperview` -> `equalToSuperview()`
+
 v1.2.4
 ==========
 
