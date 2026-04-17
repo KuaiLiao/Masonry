@@ -87,25 +87,31 @@
     };
 }
 
-- (MASConstraint *)equalToSuperview {
-    for (MASConstraint *constraint in self.childConstraints.copy) {
-        [constraint equalToSuperview];
-    }
-    return self;
+- (MASConstraint * _Nonnull (^)(void))equalToSuperview {
+    return ^id{
+        for (MASConstraint *constraint in self.childConstraints.copy) {
+            constraint.equalToSuperview();
+        }
+        return self;
+    };
 }
 
-- (MASConstraint *)greaterThanOrEqualToSuperview {
-    for (MASConstraint *constraint in self.childConstraints.copy) {
-        [constraint greaterThanOrEqualToSuperview];
-    }
-    return self;
+- (MASConstraint * _Nonnull (^)(void))greaterThanOrEqualToSuperview {
+    return ^id{
+        for (MASConstraint *constraint in self.childConstraints.copy) {
+            constraint.greaterThanOrEqualToSuperview();
+        }
+        return self;
+    };
 }
 
-- (MASConstraint *)lessThanOrEqualToSuperview {
-    for (MASConstraint *constraint in self.childConstraints.copy) {
-        [constraint lessThanOrEqualToSuperview];
-    }
-    return self;
+- (MASConstraint * _Nonnull (^)(void))lessThanOrEqualToSuperview {
+    return ^id{
+        for (MASConstraint *constraint in self.childConstraints.copy) {
+            constraint.lessThanOrEqualToSuperview();
+        }
+        return self;
+    };
 }
 
 #pragma mark - attribute chaining

@@ -60,22 +60,28 @@
     };
 }
 
-- (MASConstraint *)equalToSuperview {
-    id superview = [self mas_superview];
-    NSAssert(superview != nil, @"equalToSuperview requires the constrained item to have a superview.");
-    return self.equalToWithRelation(superview, NSLayoutRelationEqual);
+- (MASConstraint * _Nonnull (^)(void))equalToSuperview {
+    return ^id{
+        id superview = [self mas_superview];
+        NSAssert(superview != nil, @"equalToSuperview requires the constrained item to have a superview.");
+        return self.equalToWithRelation(superview, NSLayoutRelationEqual);
+    };
 }
 
-- (MASConstraint *)greaterThanOrEqualToSuperview {
-    id superview = [self mas_superview];
-    NSAssert(superview != nil, @"greaterThanOrEqualToSuperview requires the constrained item to have a superview.");
-    return self.equalToWithRelation(superview, NSLayoutRelationGreaterThanOrEqual);
+- (MASConstraint * _Nonnull (^)(void))greaterThanOrEqualToSuperview {
+    return ^id{
+        id superview = [self mas_superview];
+        NSAssert(superview != nil, @"greaterThanOrEqualToSuperview requires the constrained item to have a superview.");
+        return self.equalToWithRelation(superview, NSLayoutRelationGreaterThanOrEqual);
+    };
 }
 
-- (MASConstraint *)lessThanOrEqualToSuperview {
-    id superview = [self mas_superview];
-    NSAssert(superview != nil, @"lessThanOrEqualToSuperview requires the constrained item to have a superview.");
-    return self.equalToWithRelation(superview, NSLayoutRelationLessThanOrEqual);
+- (MASConstraint * _Nonnull (^)(void))lessThanOrEqualToSuperview {
+    return ^id{
+        id superview = [self mas_superview];
+        NSAssert(superview != nil, @"lessThanOrEqualToSuperview requires the constrained item to have a superview.");
+        return self.equalToWithRelation(superview, NSLayoutRelationLessThanOrEqual);
+    };
 }
 
 #pragma mark - MASLayoutPriority proxies
