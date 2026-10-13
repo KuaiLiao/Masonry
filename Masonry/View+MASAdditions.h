@@ -61,6 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) MASViewAttribute *mas_safeAreaLayoutGuideCenterX API_AVAILABLE(ios(11.0));
 @property (nonatomic, readonly) MASViewAttribute *mas_safeAreaLayoutGuideCenterY API_AVAILABLE(ios(11.0));
 
+#if TARGET_OS_IPHONE && !TARGET_OS_TV
 @property (nonatomic, readonly) MASViewAttribute *mas_keyboardLayoutGuide API_AVAILABLE(ios(15.0));
 @property (nonatomic, readonly) MASViewAttribute *mas_keyboardLayoutGuideLeading API_AVAILABLE(ios(15.0));
 @property (nonatomic, readonly) MASViewAttribute *mas_keyboardLayoutGuideTrailing API_AVAILABLE(ios(15.0));
@@ -72,6 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) MASViewAttribute *mas_keyboardLayoutGuideHeight API_AVAILABLE(ios(15.0));
 @property (nonatomic, readonly) MASViewAttribute *mas_keyboardLayoutGuideCenterX API_AVAILABLE(ios(15.0));
 @property (nonatomic, readonly) MASViewAttribute *mas_keyboardLayoutGuideCenterY API_AVAILABLE(ios(15.0));
+#endif
 
 #endif
 

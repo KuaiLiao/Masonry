@@ -171,6 +171,7 @@
     return [[MASViewAttribute alloc] initWithView:self item:self.safeAreaLayoutGuide layoutAttribute:NSLayoutAttributeCenterY];
 }
 
+#if TARGET_OS_IPHONE && !TARGET_OS_TV
 - (MASViewAttribute *)mas_keyboardLayoutGuide {
     return [[MASViewAttribute alloc] initWithView:self item:self.keyboardLayoutGuide layoutAttribute:NSLayoutAttributeNotAnAttribute];
 }
@@ -214,6 +215,7 @@
 - (MASViewAttribute *)mas_keyboardLayoutGuideCenterY {
     return [[MASViewAttribute alloc] initWithView:self item:self.keyboardLayoutGuide layoutAttribute:NSLayoutAttributeCenterY];
 }
+#endif
 
 #endif
 
