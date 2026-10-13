@@ -1,6 +1,10 @@
+v1.2.6
+==========
+* fix keyboard layout guide APIs compilation error on tvOS platform
+
 v1.2.5
 ==========
-Unified grammar for `superview` constraints, eg: `equalToSuperview` -> `equalToSuperview()`
+* Unified grammar for `superview` constraints, eg: `equalToSuperview` -> `equalToSuperview()`
 
 v1.2.4
 ==========
